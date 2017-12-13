@@ -1,0 +1,17 @@
+#  Debug journal  npm 
+npm-debug.log* 
+
+#  Project dependencies
+node  modules 
+
+#  Folder attributes  OSX 
+.DS  Store 
+
+#  NPM modules
+node_modules/
+jspm_packages/
+
+#  Temp files
+*.tmp 
+*-
+.vscode/launch.json
