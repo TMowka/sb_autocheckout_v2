@@ -3,7 +3,7 @@ const _ = require('lodash');
 const util = require('util');
 const config = require('./config.json');
 
-const __shops = require('./shops/__shops.js');
+const __shops = require('./__shops.js');
 
 function cookieTransform(cookies) {
     var updated = [];
@@ -50,7 +50,7 @@ function (done) {
     let proxy = null;
     switch(args.length){
         case 0:{
-            link = 'http://www.checkip.org/';
+            link = 'https://duckduckgo.com';
             //link = 'http://www.supremenewyork.com/shop/t-shirts/bikdwcmzj';
             //proxy = { hostPort: '87.98.136.3:12345', login: 'douma', password: 'douma' };
         }break;
@@ -84,14 +84,14 @@ function openBrowser(shopId, link, proxy){
         .clearCache()
         .cookies.set(cookieTransform(config.gCookies));
 
+        let shop = new __shops().getShop(6026);
+
     setTimeout(function () {
         checkoutBrowser
             .authentication(proxy ? proxy.login : null, proxy ? proxy.password : null)
             .goto(link)
             .then(function () {
-                let s_c = new supremenewyork_com();
-                s_c.checkout(checkoutBrowser);
-                //checkoutProcess(browser, i?);
+                shop.runSteps(shop, checkoutBrowser);
             }).catch(function (error) {
                 console.error('an error has occurred: ' + error);
                 console.error(util.inspect(error));
