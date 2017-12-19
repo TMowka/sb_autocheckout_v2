@@ -1,11 +1,12 @@
 class supremenewyork_com {
-    constructor() {
+    constructor(size) {
         this.id = 6026;
         this.homePage = 'supremenewyork.com';
-        this.shopConfig = require('./configs/supremenewyork_comConfig.json');
+        this.shopConfig = require('./configs/supremenewyork_com.json');
+        this.size = size | this.shopConfig.size;
         this.steps = [];
 
-        this.steps.push(function (browser) {
+        this.steps.push(function (self, browser) {
             browser
                 .type('#search_form_input_homepage', 'test nightmare')
                 .click('#search_button_homepage')
@@ -14,7 +15,7 @@ class supremenewyork_com {
                 });
         });
 
-        this.steps.push(function (browser) {
+        this.steps.push(function (self, browser) {
             browser
                 .type('#search_form_input', 'test nightmare 2')
                 .click('#search_button')
@@ -26,7 +27,7 @@ class supremenewyork_com {
         this.runSteps = function(self, browser){
             this.steps.forEach(function(element, index) {
                 setTimeout(function(){
-                    element(browser);
+                    element(self, browser);
                 }, index * self.shopConfig.pauseBetweenSteps);
             });
         };

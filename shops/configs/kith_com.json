@@ -1,0 +1,27 @@
+{
+    "size" : "8",
+    "pauseBetweenSteps": 5000,
+    "customerInformation": {
+        "email": "example@gmail.com",
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "address1": "address1",
+        "address2": "",
+        "city": "Adger",
+        "country": "United States",
+        "province": "Alabama",
+        "zip": 35006,
+        "phone": "+333333333333",
+        "payPal": {
+            "use": true,
+            "email": "example@gmail.com",
+            "password": "password"
+        },
+        "card": {
+            "cardNumber": "4444444444444444",
+            "nameOnCard": "nameOnCard",
+            "mmYY": "03/20",
+            "cvv": 333
+        }
+    }
+}

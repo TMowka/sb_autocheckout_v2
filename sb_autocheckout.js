@@ -1,4 +1,5 @@
 const Nightmare = require('nightmare');
+require('nightmare-iframe-manager')(Nightmare);
 const _ = require('lodash');
 const util = require('util');
 const config = require('./config.json');
@@ -48,9 +49,10 @@ function (done) {
     let shopId = null;
     let link = null;
     let proxy = null;
+    let size = null;
     switch(args.length){
         case 0:{
-            link = 'https://duckduckgo.com';
+            link = 'https://kith.com/cart/888461000711:1';
             //link = 'http://www.supremenewyork.com/shop/t-shirts/bikdwcmzj';
             //proxy = { hostPort: '87.98.136.3:12345', login: 'douma', password: 'douma' };
         }break;
@@ -66,25 +68,34 @@ function (done) {
             link = args[1];
             proxy = args[2];
         }break;
+        case 4:{
+            shopId = args[0];
+            link = args[1];
+            proxy = args[2];
+            size = args[3];
+        }break;
     }
 
-    openBrowser(shopId, link, proxy);
+    openBrowser(shopId, link, proxy, size);
 })();
 
-function openBrowser(shopId, link, proxy){
+function openBrowser(shopId, link, proxy, size){
     let checkoutBrowser = Nightmare({
             show: true,
             alwaysOnTop: false,
             switches: proxy ? {
                 'proxy-server': proxy.hostPort,
                 'ignore-certificate-errors': false
-            } : { }
+            } : { },
+            webPreferences: {
+                webSecurity: false
+            }
         }).useragent(config.userAgent)
         .cookies.clearAll()
         .clearCache()
         .cookies.set(cookieTransform(config.gCookies));
 
-        let shop = new __shops().getShop(6026);
+        let shop = new __shops(size).getShop(1003);
 
     setTimeout(function () {
         checkoutBrowser
