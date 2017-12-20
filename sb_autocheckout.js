@@ -31,62 +31,66 @@ function cookieTransform(cookies) {
 }
 
 Nightmare.action('clearCache',
-function (name, options, parent, win, renderer, done) {
-    parent.respondTo('clearCache', function (done) {
-        win.webContents.session.clearCache(done);
+    function (name, options, parent, win, renderer, done) {
+        parent.respondTo('clearCache', function (done) {
+            win.webContents.session.clearCache(done);
+            done();
+
+        });
         done();
-
+    },
+    function (done) {
+        this.child.call('clearCache', done);
     });
-    done();
-},
-function (done) {
-    this.child.call('clearCache', done);
-});
 
-(function readArgs(){
+(function readArgs() {
     let args = process.argv.splice(2);
 
     let shopId = null;
     let link = null;
     let proxy = null;
     let size = null;
-    switch(args.length){
-        case 0:{
-            link = 'https://kith.com/cart/888461000711:1';
+    switch (args.length) {
+        case 0:
+            //test
+            shopId = 6026;
+            link = 'http://www.supremenewyork.com/shop/accessories/x69bm3kwz';
+            proxy = { hostPort: "46.105.56.59:12345", login: "douma", password: "douma" };
+            size = 'Medium';
             //link = 'http://www.supremenewyork.com/shop/t-shirts/bikdwcmzj';
             //proxy = { hostPort: '87.98.136.3:12345', login: 'douma', password: 'douma' };
-        }break;
-        case 1:{
+            break;
+        case 1:
             link = args[0];
-        }break;
-        case 2:{
+            break;
+        case 2:
             link = args[0];
             proxy = args[1];
-        }break;
-        case 3:{
+            break;
+        case 3:
             shopId = args[0];
             link = args[1];
             proxy = args[2];
-        }break;
-        case 4:{
+            break;
+        case 4:
             shopId = args[0];
             link = args[1];
             proxy = args[2];
             size = args[3];
-        }break;
+            break;
     }
 
     openBrowser(shopId, link, proxy, size);
 })();
 
-function openBrowser(shopId, link, proxy, size){
+function openBrowser(shopId, link, proxy, size) {
     let checkoutBrowser = Nightmare({
             show: true,
             alwaysOnTop: false,
             switches: proxy ? {
                 'proxy-server': proxy.hostPort,
                 'ignore-certificate-errors': false
-            } : { },
+            } : {},
             webPreferences: {
                 webSecurity: false
             }
@@ -95,7 +99,7 @@ function openBrowser(shopId, link, proxy, size){
         .clearCache()
         .cookies.set(cookieTransform(config.gCookies));
 
-        let shop = new __shops(size).getShop(1003);
+    let shop = new __shops(size).getShop(shopId);
 
     setTimeout(function () {
         checkoutBrowser
@@ -104,7 +108,6 @@ function openBrowser(shopId, link, proxy, size){
             .then(function () {
                 shop.runSteps(shop, checkoutBrowser);
             }).catch(function (error) {
-                console.error('an error has occurred: ' + error);
                 console.error(util.inspect(error));
                 checkoutBrowser.end();
             });

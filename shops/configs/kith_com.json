@@ -1,6 +1,6 @@
 {
-    "size" : "8",
-    "pauseBetweenSteps": 5000,
+    "size": "8",
+    "pauseBetweenSteps": 2000,
     "customerInformation": {
         "email": "example@gmail.com",
         "firstName": "firstName",
@@ -10,10 +10,10 @@
         "city": "Adger",
         "country": "United States",
         "province": "Alabama",
-        "zip": 35006,
+        "zip": "35006",
         "phone": "+333333333333",
+        "paymentMethod": 2,
         "payPal": {
-            "use": true,
             "email": "example@gmail.com",
             "password": "password"
         },

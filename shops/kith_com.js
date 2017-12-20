@@ -3,9 +3,10 @@ class kith_com {
         this.id = 1003;
         this.homePage = 'kith.com';
         this.shopConfig = require('./configs/kith_com.json');
-        this.size = size | this.shopConfig.size;
+        this.size = size || this.shopConfig.size;
         this.steps = [];
 
+        //1
         this.steps.push(function (self, browser) {
             browser
                 .insert('#checkout_email', self.shopConfig.customerInformation.email)
@@ -20,46 +21,56 @@ class kith_com {
                 .insert('#checkout_shipping_address_phone', self.shopConfig.customerInformation.phone)
                 .click('.step__footer__continue-btn.btn')
                 .catch(function (error) {
-                    throw error;
+                    console.error(util.inspect(error));
                 });
         });
 
+        //2
         this.steps.push(function (self, browser) {
             browser
                 .click('.step__footer__continue-btn.btn')
                 .catch(function (error) {
-                    throw error;
+                    console.error(util.inspect(error));
                 });
         });
 
+        //3
         this.steps.push(function (self, browser) {
-            self.shopConfig.customerInformation.payPal.use ?
-                browser
-                .check('#checkout_payment_gateway_3700574')
-                .click('.step__footer__continue-btn.btn')
-                .catch(function (error) {
-                    throw error;
-                }) :
-                browser
-                .enterIFrame('iframe[id^="card-fields-number-"]')
-                .insert('#number', self.shopConfig.customerInformation.card.cardNumber)
-                .exitIFrame()
-                .enterIFrame('iframe[id^="card-fields-name-"]')
-                .insert('#name', self.shopConfig.customerInformation.card.nameOnCard)
-                .exitIFrame()
-                .enterIFrame('iframe[id^="card-fields-expiry-"]')
-                .insert('#expiry', self.shopConfig.customerInformation.card.mmYY)
-                .exitIFrame()
-                .enterIFrame('iframe[id^="card-fields-verification_value-"]')
-                .insert('#verification_value', self.shopConfig.customerInformation.card.cvv)
-                .exitIFrame()
-                .click('.step__footer__continue-btn.btn ')
-                .catch(function (error) {
-                    console.log(error);
-                });
+            switch (self.shopConfig.customerInformation.paymentMethod) {
+                case 1:
+                    browser
+                        .enterIFrame('iframe[id^="card-fields-number-"]')
+                        .insert('#number', self.shopConfig.customerInformation.card.cardNumber)
+                        .exitIFrame()
+                        .enterIFrame('iframe[id^="card-fields-name-"]')
+                        .insert('#name', self.shopConfig.customerInformation.card.nameOnCard)
+                        .exitIFrame()
+                        .enterIFrame('iframe[id^="card-fields-expiry-"]')
+                        .insert('#expiry', self.shopConfig.customerInformation.card.mmYY)
+                        .exitIFrame()
+                        .enterIFrame('iframe[id^="card-fields-verification_value-"]')
+                        .insert('#verification_value', self.shopConfig.customerInformation.card.cvv)
+                        .exitIFrame()
+                        .click('.step__footer__continue-btn.btn ')
+                        .catch(function (error) {
+                            console.error(util.inspect(error));
+                        });
+                    break;
+                case 2:
+                    browser
+                        .check('#checkout_payment_gateway_3700574')
+                        .click('.step__footer__continue-btn.btn')
+                        .catch(function (error) {
+                            console.error(util.inspect(error));
+                        });
+                    break;
+                default:
+                    console.error('Incorrect or not selected "paymentMethod"');
+            }
         });
 
-        if (this.shopConfig.customerInformation.payPal.use) {
+        if (this.shopConfig.customerInformation.paymentMethod === 2) {
+            //4
             this.steps.push(function (self, browser) {
                 browser
                     .insert('#email', '')
@@ -67,7 +78,16 @@ class kith_com {
                     .insert('#password', self.shopConfig.customerInformation.payPal.password)
                     .click('#btnLogin')
                     .catch(function (error) {
-                        throw error;
+                        console.error(util.inspect(error));
+                    });
+            });
+
+            //5
+            this.steps.push(function (self, browser) {
+                browser
+                    .click('#confirmButtonTop')
+                    .catch(function (error) {
+                        console.error(util.inspect(error));
                     });
             });
         }

@@ -1,4 +1,31 @@
 {
     "size": "Medium",
-    "pauseBetweenSteps": 5000
+    "pauseBetweenSteps": 2000,
+    "gmail": {
+        "enabled": false,
+        "email" : "example@gmail.com",
+        "password": "password"
+    },
+    "customerInformation": {
+        "fullName": "fullName",
+        "email": "example@gmail.com",
+        "tel": "+333333333333",
+        "address": "address",
+        "address2": "address2",
+        "address3": "address3",
+        "city": "Anguilla",
+        "postCode": "AI-2640",
+        "country": "GB",
+        "paymentMethod": 5,
+        "payPal": {
+            "email": "example@gmail.com",
+            "password": "password"
+        },
+        "card": {
+            "number": "4444444444444444",
+            "month": "03",
+            "year": "2020",
+            "cvv": 333
+        }
+    }
 }

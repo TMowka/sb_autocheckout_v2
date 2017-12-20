@@ -17,7 +17,7 @@ class __shops{
                 if(item.id == shopId) searchShop = item;
             });
 
-            if(!searchShop) throw 'Shop not found. Trace: __shops.js -> this.getShop -> 16L-18L';
+            if(!searchShop) throw `Shop with id:${shopId} not found.`;
             return searchShop;
         };
     }
