@@ -51,21 +51,9 @@ Nightmare.action('clearCache',
     let proxy = null;
     let size = null;
     switch (args.length) {
-        case 0:
-            //test
-            shopId = 6026;
-            link = 'http://www.supremenewyork.com/shop/accessories/x69bm3kwz';
-            proxy = { hostPort: "46.105.56.59:12345", login: "douma", password: "douma" };
-            size = 'Medium';
-            //link = 'http://www.supremenewyork.com/shop/t-shirts/bikdwcmzj';
-            //proxy = { hostPort: '87.98.136.3:12345', login: 'douma', password: 'douma' };
-            break;
-        case 1:
-            link = args[0];
-            break;
         case 2:
-            link = args[0];
-            proxy = args[1];
+            shopId = args[0];
+            link = args[1];
             break;
         case 3:
             shopId = args[0];
