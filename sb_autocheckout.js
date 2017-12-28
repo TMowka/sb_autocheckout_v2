@@ -43,13 +43,20 @@ Nightmare.action('clearCache',
         this.child.call('clearCache', done);
     });
 
+Array.prototype._diff = function (arr2) {
+    for (let i in this) {
+        if (arr2.indexOf(this[i].text) > -1)
+            return this[i].value;
+    }
+};
+
 (function readArgs() {
     let args = process.argv.splice(2);
 
     let shopId = null;
     let link = null;
-    let proxy = null;
-    let size = null;
+    let proxy = config.proxy;
+    let sizes = null;
     switch (args.length) {
         case 2:
             shopId = args[0];
@@ -58,20 +65,20 @@ Nightmare.action('clearCache',
         case 3:
             shopId = args[0];
             link = args[1];
-            proxy = args[2];
+            proxy = args[2] || proxy;
             break;
         case 4:
             shopId = args[0];
             link = args[1];
-            proxy = args[2];
-            size = args[3];
+            proxy = args[2] || proxy;
+            sizes = args[3];
             break;
     }
 
-    openBrowser(shopId, link, proxy, size);
+    openBrowser(shopId, link, proxy, sizes);
 })();
 
-function openBrowser(shopId, link, proxy, size) {
+function openBrowser(shopId, link, proxy, sizes) {
     let checkoutBrowser = Nightmare({
             show: true,
             alwaysOnTop: false,
@@ -87,7 +94,7 @@ function openBrowser(shopId, link, proxy, size) {
         .clearCache()
         .cookies.set(cookieTransform(config.gCookies));
 
-    let shop = new __shops(size).getShop(shopId);
+    let shop = new __shops(sizes).getShop(shopId);
 
     setTimeout(function () {
         checkoutBrowser

@@ -1,9 +1,9 @@
 class supremenewyork_com {
-    constructor(size) {
+    constructor(sizes) {
         this.id = 6026;
         this.homePage = 'supremenewyork.com';
         this.shopConfig = require('./configs/supremenewyork_com.json');
-        this.size = size || this.shopConfig.size;
+        this.sizes = sizes || this.shopConfig.sizes;
         this.steps = [];
 
         if (this.shopConfig.gmail.enabled) {
@@ -62,12 +62,17 @@ class supremenewyork_com {
                     return options;
                 })
                 .then(function (options) {
-                    sizeValue = options.find(function (element) {
-                        return element.text == self.size;
-                    }).value;
+                    sizeValue = options._diff(self.sizes);
 
-                    return browser
+                    if (!sizeValue && self.shopConfig.strictSizes)
+                        throw 'Specified size not found';
+
+                    return sizeValue ? browser
                         .select('#size', sizeValue)
+                        .click('input[value="add to basket"]')
+                        .catch(function (error) {
+                            console.error(util.inspect(error));
+                        }) : browser
                         .click('input[value="add to basket"]')
                         .catch(function (error) {
                             console.error(util.inspect(error));

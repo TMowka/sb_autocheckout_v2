@@ -1,6 +1,7 @@
 {
-    "size": "8",
-    "pauseBetweenSteps": 2000,
+    "sizes": ["15"],
+    "strictSizes": true,
+    "pauseBetweenSteps": 5000,
     "customerInformation": {
         "email": "example@gmail.com",
         "firstName": "firstName",

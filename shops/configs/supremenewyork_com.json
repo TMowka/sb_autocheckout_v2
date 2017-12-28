@@ -1,6 +1,7 @@
 {
-    "size": "Medium",
-    "pauseBetweenSteps": 2000,
+    "sizes": ["Small", "XLarge"],
+    "strictSizes": true,
+    "pauseBetweenSteps": 5000,
     "gmail": {
         "enabled": false,
         "email" : "example@gmail.com",
