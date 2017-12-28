@@ -70,7 +70,8 @@ Array.prototype._diff = function (arr2) {
         case 4:
             shopId = args[0];
             link = args[1];
-            proxy = args[2] || proxy;
+            if (args[2])
+                proxy = args[2];
             sizes = args[3];
             break;
     }
