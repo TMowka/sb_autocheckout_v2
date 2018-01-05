@@ -77,8 +77,6 @@ Array.prototype._diff = function (arr2) {
             break;
     }
 
-    shopId = 1003;
-    link = 'https://kith.com/products/kith-ainodake-parka-cheetah';
     openBrowser(shopId, link, proxy, sizes);
 })();
 
