@@ -50,7 +50,7 @@ Array.prototype._diff = function (arr2) {
     }
 };
 
-(function readArgs() {
+(() => {
     let args = process.argv.splice(2);
 
     let shopId = null;
@@ -77,6 +77,8 @@ Array.prototype._diff = function (arr2) {
             break;
     }
 
+    shopId = 1003;
+    link = 'https://kith.com/products/kith-ainodake-parka-cheetah';
     openBrowser(shopId, link, proxy, sizes);
 })();
 
@@ -103,7 +105,7 @@ function openBrowser(shopId, link, proxy, sizes) {
             .authentication(proxy ? proxy.login : null, proxy ? proxy.password : null)
             .goto(link)
             .then(function () {
-                shop.runSteps(shop, checkoutBrowser);
+                shop.runSteps.call(shop, checkoutBrowser);
             }).catch(function (error) {
                 console.error(util.inspect(error));
                 checkoutBrowser.end();

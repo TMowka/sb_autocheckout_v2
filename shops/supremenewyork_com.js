@@ -7,51 +7,51 @@ class supremenewyork_com {
         this.steps = [];
 
         if (this.shopConfig.gmail.enabled) {
-            //1
-            this.steps.push(function (self, browser) {
+            //1?
+            this.steps.push((browser, self = this) => {
                 browser
                     .goto('https://mail.google.com/')
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
 
-            //2
-            this.steps.push(function (self, browser) {
+            //2?
+            this.steps.push((browser, self = this) => {
                 browser
                     .insert('input[type="email"]', self.shopConfig.gmail.email)
                     .click('.RveJvd')
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
 
-            //3
-            this.steps.push(function (self, browser) {
+            //3?
+            this.steps.push((browser, self = this) => {
                 browser
                     .insert('input[type="password"]', self.shopConfig.gmail.password)
                     .click('.RveJvd')
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
 
-            //4
-            this.steps.push(function (self, browser) {
+            //4?
+            this.steps.push((browser, self = this) => {
                 browser
                     .back()
                     .back()
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
         }
 
         //1
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             let sizeValue;
             browser
-                .evaluate(function () {
+                .evaluate(() => {
                     var options = [];
                     $('#size').children().each(function (index) {
                         options.push({
@@ -61,7 +61,7 @@ class supremenewyork_com {
                     });
                     return options;
                 })
-                .then(function (options) {
+                .then((options) => {
                     sizeValue = options._diff(self.sizes);
 
                     if (!sizeValue && self.shopConfig.strictSizes)
@@ -70,28 +70,28 @@ class supremenewyork_com {
                     return sizeValue ? browser
                         .select('#size', sizeValue)
                         .click('input[value="add to basket"]')
-                        .catch(function (error) {
+                        .catch((error) => {
                             console.error(util.inspect(error));
                         }) : browser
                         .click('input[value="add to basket"]')
-                        .catch(function (error) {
+                        .catch((error) => {
                             console.error(util.inspect(error));
                         });
                 });
         });
 
         //2
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             browser
                 .click('a.button.checkout')
-                .catch(function (error) {
+                .catch((error) => {
                     console.error(util.inspect(error));
                 });
 
         });
 
         //3
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             let paymentMethod;
             switch (self.shopConfig.customerInformation.paymentMethod) {
                 case 1:
@@ -124,63 +124,63 @@ class supremenewyork_com {
                 .insert('#order_billing_zip', self.shopConfig.customerInformation.postCode)
                 .select('#order_billing_country', self.shopConfig.customerInformation.country)
                 .select('#credit_card_type', paymentMethod)
-                .evaluate(function () {
+                .evaluate(() => {
                     $('.iCheck-helper').trigger('click');
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     console.error(util.inspect(error));
                 });
         });
 
         if (this.shopConfig.customerInformation.paymentMethod > 0 && this.shopConfig.customerInformation.paymentMethod <= 4) {
             //4?
-            this.steps.push(function (self, browser) {
+            this.steps.push((browser, self = this) => {
                 browser
                     .insert('#cnb', self.shopConfig.customerInformation.card.number)
                     .select('#credit_card_month', self.shopConfig.customerInformation.card.month)
                     .select('#credit_card_year', self.shopConfig.customerInformation.card.year)
                     .insert('#vval', self.shopConfig.customerInformation.card.cvv)
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
         }
 
         //5
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             browser
                 .click('input.button.checkout')
-                .catch(function (error) {
+                .catch((error) => {
                     console.error(util.insert(error));
                 });
         });
 
         if (this.shopConfig.customerInformation.paymentMethod === 5) {
             //5?
-            this.steps.push(function (self, browser) {
+            this.steps.push((browser, self = this) => {
                 browser
                     .insert('#email', '')
                     .insert('#email', self.shopConfig.customerInformation.payPal.email)
                     .insert('#password', self.shopConfig.customerInformation.payPal.password)
                     .click('#btnLogin')
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
 
             //6?
-            this.steps.push(function (self, browser) {
+            this.steps.push((browser, self = this) => {
                 browser
                     .click('#confirmButtonTop')
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
         }
 
-        this.runSteps = function (self, browser) {
-            this.steps.forEach(function (element, index) {
-                setTimeout(function () {
+        this.runSteps = (browser, self = this) => {
+            this.steps.forEach((element, index) => {
+                setTimeout(() => {
                     element(self, browser);
                 }, index * self.shopConfig.pauseBetweenSteps);
             });

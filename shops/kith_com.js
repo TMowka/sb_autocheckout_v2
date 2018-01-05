@@ -7,10 +7,10 @@ class kith_com {
         this.steps = [];
 
         //1
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             let sizeValue;
             browser
-                .evaluate(function () {
+                .evaluate(() => {
                     var options = [];
                     $('#productSelect-option-0').children().each(function (index) {
                         options.push({
@@ -20,7 +20,7 @@ class kith_com {
                     });
                     return options;
                 })
-                .then(function (options) {
+                .then((options) => {
                     sizeValue = options._diff(self.sizes);
 
                     if (!sizeValue && self.shopConfig.strictSizes)
@@ -29,28 +29,28 @@ class kith_com {
                     return sizeValue ? browser
                         .select('#productSelect-option-0', sizeValue)
                         .click('#AddToCart')
-                        .catch(function (error) {
+                        .catch((error) => {
                             console.error(util.inspect(error));
                         }) :
                         browser
                         .click('#AddToCart')
-                        .catch(function (error) {
+                        .catch((error) => {
                             console.error(util.inspect(error));
                         });
                 });
         });
 
         //2
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             browser
                 .click('.btn.btn--full.cart-checkout')
-                .catch(function (error) {
+                .catch((error) => {
                     console.error(util.insert(error));
                 });
         });
 
         //3
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             browser
                 .insert('#checkout_email', self.shopConfig.customerInformation.email)
                 .insert('#checkout_shipping_address_first_name', self.shopConfig.customerInformation.firstName)
@@ -63,22 +63,22 @@ class kith_com {
                 .insert('#checkout_shipping_address_zip', self.shopConfig.customerInformation.zip)
                 .insert('#checkout_shipping_address_phone', self.shopConfig.customerInformation.phone)
                 .click('.step__footer__continue-btn.btn')
-                .catch(function (error) {
+                .catch((error) => {
                     console.error(util.inspect(error));
                 });
         });
 
         //4
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             browser
                 .click('.step__footer__continue-btn.btn')
-                .catch(function (error) {
+                .catch((error) => {
                     console.error(util.inspect(error));
                 });
         });
 
         //5
-        this.steps.push(function (self, browser) {
+        this.steps.push((browser, self = this) => {
             switch (self.shopConfig.customerInformation.paymentMethod) {
                 case 1:
                     browser
@@ -95,7 +95,7 @@ class kith_com {
                         .insert('#verification_value', self.shopConfig.customerInformation.card.cvv)
                         .exitIFrame()
                         .click('.step__footer__continue-btn.btn ')
-                        .catch(function (error) {
+                        .catch((error) => {
                             console.error(util.inspect(error));
                         });
                     break;
@@ -103,7 +103,7 @@ class kith_com {
                     browser
                         .check('#checkout_payment_gateway_3700574')
                         .click('.step__footer__continue-btn.btn')
-                        .catch(function (error) {
+                        .catch((error) => {
                             console.error(util.inspect(error));
                         });
                     break;
@@ -114,31 +114,31 @@ class kith_com {
 
         if (this.shopConfig.customerInformation.paymentMethod === 2) {
             //6?
-            this.steps.push(function (self, browser) {
+            this.steps.push((browser, self = this) => {
                 browser
                     .insert('#email', '')
                     .insert('#email', self.shopConfig.customerInformation.payPal.email)
                     .insert('#password', self.shopConfig.customerInformation.payPal.password)
                     .click('#btnLogin')
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
 
             //7?
-            this.steps.push(function (self, browser) {
+            this.steps.push((browser, self = this) => {
                 browser
                     .click('#confirmButtonTop')
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.error(util.inspect(error));
                     });
             });
         }
 
-        this.runSteps = function (self, browser) {
-            this.steps.forEach(function (element, index) {
-                setTimeout(function () {
-                    element(self, browser);
+        this.runSteps = (browser, self = this) => {
+            this.steps.forEach((element, index) => {
+                setTimeout(() => {
+                    element.call(self, browser);
                 }, index * self.shopConfig.pauseBetweenSteps);
             });
         };
