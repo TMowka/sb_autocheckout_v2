@@ -7,7 +7,7 @@ class kith_com {
         this.steps = [];
 
         //1
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             let sizeValue;
             browser
                 .evaluate(() => {
@@ -21,9 +21,9 @@ class kith_com {
                     return options;
                 })
                 .then((options) => {
-                    sizeValue = options._diff(self.sizes);
+                    sizeValue = options._diff(this.sizes);
 
-                    if (!sizeValue && self.shopConfig.strictSizes)
+                    if (!sizeValue && this.shopConfig.strictSizes)
                         throw 'Specified size not found';
 
                     return sizeValue ? browser
@@ -41,7 +41,7 @@ class kith_com {
         });
 
         //2
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             browser
                 .click('.btn.btn--full.cart-checkout')
                 .catch((error) => {
@@ -50,18 +50,18 @@ class kith_com {
         });
 
         //3
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             browser
-                .insert('#checkout_email', self.shopConfig.customerInformation.email)
-                .insert('#checkout_shipping_address_first_name', self.shopConfig.customerInformation.firstName)
-                .insert('#checkout_shipping_address_last_name', self.shopConfig.customerInformation.lastName)
-                .insert('#checkout_shipping_address_address1', self.shopConfig.customerInformation.address1)
-                .insert('#checkout_shipping_address_address2', self.shopConfig.customerInformation.address2)
-                .insert('#checkout_shipping_address_city', self.shopConfig.customerInformation.city)
-                .select('#checkout_shipping_address_country', self.shopConfig.customerInformation.country)
-                .select('#checkout_shipping_address_province', self.shopConfig.customerInformation.province)
-                .insert('#checkout_shipping_address_zip', self.shopConfig.customerInformation.zip)
-                .insert('#checkout_shipping_address_phone', self.shopConfig.customerInformation.phone)
+                .insert('#checkout_email', this.shopConfig.customerInformation.email)
+                .insert('#checkout_shipping_address_first_name', this.shopConfig.customerInformation.firstName)
+                .insert('#checkout_shipping_address_last_name', this.shopConfig.customerInformation.lastName)
+                .insert('#checkout_shipping_address_address1', this.shopConfig.customerInformation.address1)
+                .insert('#checkout_shipping_address_address2', this.shopConfig.customerInformation.address2)
+                .insert('#checkout_shipping_address_city', this.shopConfig.customerInformation.city)
+                .select('#checkout_shipping_address_country', this.shopConfig.customerInformation.country)
+                .select('#checkout_shipping_address_province', this.shopConfig.customerInformation.province)
+                .insert('#checkout_shipping_address_zip', this.shopConfig.customerInformation.zip)
+                .insert('#checkout_shipping_address_phone', this.shopConfig.customerInformation.phone)
                 .click('.step__footer__continue-btn.btn')
                 .catch((error) => {
                     console.error(util.inspect(error));
@@ -69,7 +69,7 @@ class kith_com {
         });
 
         //4
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             browser
                 .click('.step__footer__continue-btn.btn')
                 .catch((error) => {
@@ -78,21 +78,21 @@ class kith_com {
         });
 
         //5
-        this.steps.push((browser, self = this) => {
-            switch (self.shopConfig.customerInformation.paymentMethod) {
+        this.steps.push((browser) => {
+            switch (this.shopConfig.customerInformation.paymentMethod) {
                 case 1:
                     browser
                         .enterIFrame('iframe[id^="card-fields-number-"]')
-                        .insert('#number', self.shopConfig.customerInformation.card.cardNumber)
+                        .insert('#number', this.shopConfig.customerInformation.card.cardNumber)
                         .exitIFrame()
                         .enterIFrame('iframe[id^="card-fields-name-"]')
-                        .insert('#name', self.shopConfig.customerInformation.card.nameOnCard)
+                        .insert('#name', this.shopConfig.customerInformation.card.nameOnCard)
                         .exitIFrame()
                         .enterIFrame('iframe[id^="card-fields-expiry-"]')
-                        .insert('#expiry', self.shopConfig.customerInformation.card.mmYY)
+                        .insert('#expiry', this.shopConfig.customerInformation.card.mmYY)
                         .exitIFrame()
                         .enterIFrame('iframe[id^="card-fields-verification_value-"]')
-                        .insert('#verification_value', self.shopConfig.customerInformation.card.cvv)
+                        .insert('#verification_value', this.shopConfig.customerInformation.card.cvv)
                         .exitIFrame()
                         .click('.step__footer__continue-btn.btn ')
                         .catch((error) => {
@@ -114,11 +114,11 @@ class kith_com {
 
         if (this.shopConfig.customerInformation.paymentMethod === 2) {
             //6?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
                     .insert('#email', '')
-                    .insert('#email', self.shopConfig.customerInformation.payPal.email)
-                    .insert('#password', self.shopConfig.customerInformation.payPal.password)
+                    .insert('#email', this.shopConfig.customerInformation.payPal.email)
+                    .insert('#password', this.shopConfig.customerInformation.payPal.password)
                     .click('#btnLogin')
                     .catch((error) => {
                         console.error(util.inspect(error));
@@ -126,7 +126,7 @@ class kith_com {
             });
 
             //7?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
                     .click('#confirmButtonTop')
                     .catch((error) => {
@@ -135,11 +135,11 @@ class kith_com {
             });
         }
 
-        this.runSteps = (browser, self = this) => {
+        this.runSteps = (browser) => {
             this.steps.forEach((element, index) => {
                 setTimeout(() => {
-                    element.call(self, browser);
-                }, index * self.shopConfig.pauseBetweenSteps);
+                    element(browser);
+                }, index * this.shopConfig.pauseBetweenSteps);
             });
         };
     }

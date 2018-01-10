@@ -1,3 +1,7 @@
+/*0*/
+const testShop = require('./shops/testShop.js');
+
+
 /*1003*/
 const kith_com = require('./shops/kith_com.js');
 
@@ -7,8 +11,10 @@ const supremenewyork_com = require('./shops/supremenewyork_com.js');
 class __shops{
     constructor(size){
         this.shopsArr = [
+            new testShop(size),
+
             new supremenewyork_com(size),
-            new kith_com(size)
+            new kith_com(size),
         ];
 
         this.getShop = function(shopId){

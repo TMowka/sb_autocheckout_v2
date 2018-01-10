@@ -50,7 +50,7 @@ Array.prototype._diff = function (arr2) {
     }
 };
 
-(() => {
+{
     let args = process.argv.splice(2);
 
     let shopId = null;
@@ -78,7 +78,7 @@ Array.prototype._diff = function (arr2) {
     }
 
     openBrowser(shopId, link, proxy, sizes);
-})();
+}
 
 function openBrowser(shopId, link, proxy, sizes) {
     let checkoutBrowser = Nightmare({
@@ -103,7 +103,7 @@ function openBrowser(shopId, link, proxy, sizes) {
             .authentication(proxy ? proxy.login : null, proxy ? proxy.password : null)
             .goto(link)
             .then(function () {
-                shop.runSteps.call(shop, checkoutBrowser);
+                shop.runSteps(checkoutBrowser);
             }).catch(function (error) {
                 console.error(util.inspect(error));
                 checkoutBrowser.end();

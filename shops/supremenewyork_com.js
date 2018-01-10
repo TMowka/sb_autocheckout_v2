@@ -8,7 +8,7 @@ class supremenewyork_com {
 
         if (this.shopConfig.gmail.enabled) {
             //1?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
                     .goto('https://mail.google.com/')
                     .catch((error) => {
@@ -17,9 +17,9 @@ class supremenewyork_com {
             });
 
             //2?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
-                    .insert('input[type="email"]', self.shopConfig.gmail.email)
+                    .insert('input[type="email"]', this.shopConfig.gmail.email)
                     .click('.RveJvd')
                     .catch((error) => {
                         console.error(util.inspect(error));
@@ -27,9 +27,9 @@ class supremenewyork_com {
             });
 
             //3?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
-                    .insert('input[type="password"]', self.shopConfig.gmail.password)
+                    .insert('input[type="password"]', this.shopConfig.gmail.password)
                     .click('.RveJvd')
                     .catch((error) => {
                         console.error(util.inspect(error));
@@ -37,7 +37,7 @@ class supremenewyork_com {
             });
 
             //4?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
                     .back()
                     .back()
@@ -48,7 +48,7 @@ class supremenewyork_com {
         }
 
         //1
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             let sizeValue;
             browser
                 .evaluate(() => {
@@ -62,9 +62,9 @@ class supremenewyork_com {
                     return options;
                 })
                 .then((options) => {
-                    sizeValue = options._diff(self.sizes);
+                    sizeValue = options._diff(this.sizes);
 
-                    if (!sizeValue && self.shopConfig.strictSizes)
+                    if (!sizeValue && this.shopConfig.strictSizes)
                         throw 'Specified size not found';
 
                     return sizeValue ? browser
@@ -81,7 +81,7 @@ class supremenewyork_com {
         });
 
         //2
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             browser
                 .click('a.button.checkout')
                 .catch((error) => {
@@ -91,9 +91,9 @@ class supremenewyork_com {
         });
 
         //3
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             let paymentMethod;
-            switch (self.shopConfig.customerInformation.paymentMethod) {
+            switch (this.shopConfig.customerInformation.paymentMethod) {
                 case 1:
                     paymentMethod = 'visa';
                     break;
@@ -114,15 +114,15 @@ class supremenewyork_com {
             }
 
             browser
-                .insert('#order_billing_name', self.shopConfig.customerInformation.fullName)
-                .insert('#order_email', self.shopConfig.customerInformation.email)
-                .insert('#order_tel', self.shopConfig.customerInformation.tel)
-                .insert('#bo', self.shopConfig.customerInformation.address)
-                .insert('#oba3', self.shopConfig.customerInformation.address2)
-                .insert('#order_billing_address_3', self.shopConfig.customerInformation.address3)
-                .insert('#order_billing_city', self.shopConfig.customerInformation.city)
-                .insert('#order_billing_zip', self.shopConfig.customerInformation.postCode)
-                .select('#order_billing_country', self.shopConfig.customerInformation.country)
+                .insert('#order_billing_name', this.shopConfig.customerInformation.fullName)
+                .insert('#order_email', this.shopConfig.customerInformation.email)
+                .insert('#order_tel', this.shopConfig.customerInformation.tel)
+                .insert('#bo', this.shopConfig.customerInformation.address)
+                .insert('#oba3', this.shopConfig.customerInformation.address2)
+                .insert('#order_billing_address_3', this.shopConfig.customerInformation.address3)
+                .insert('#order_billing_city', this.shopConfig.customerInformation.city)
+                .insert('#order_billing_zip', this.shopConfig.customerInformation.postCode)
+                .select('#order_billing_country', this.shopConfig.customerInformation.country)
                 .select('#credit_card_type', paymentMethod)
                 .evaluate(() => {
                     $('.iCheck-helper').trigger('click');
@@ -134,12 +134,12 @@ class supremenewyork_com {
 
         if (this.shopConfig.customerInformation.paymentMethod > 0 && this.shopConfig.customerInformation.paymentMethod <= 4) {
             //4?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
-                    .insert('#cnb', self.shopConfig.customerInformation.card.number)
-                    .select('#credit_card_month', self.shopConfig.customerInformation.card.month)
-                    .select('#credit_card_year', self.shopConfig.customerInformation.card.year)
-                    .insert('#vval', self.shopConfig.customerInformation.card.cvv)
+                    .insert('#cnb', this.shopConfig.customerInformation.card.number)
+                    .select('#credit_card_month', this.shopConfig.customerInformation.card.month)
+                    .select('#credit_card_year', this.shopConfig.customerInformation.card.year)
+                    .insert('#vval', this.shopConfig.customerInformation.card.cvv)
                     .catch((error) => {
                         console.error(util.inspect(error));
                     });
@@ -147,7 +147,7 @@ class supremenewyork_com {
         }
 
         //5
-        this.steps.push((browser, self = this) => {
+        this.steps.push((browser) => {
             browser
                 .click('input.button.checkout')
                 .catch((error) => {
@@ -157,11 +157,11 @@ class supremenewyork_com {
 
         if (this.shopConfig.customerInformation.paymentMethod === 5) {
             //5?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
                     .insert('#email', '')
-                    .insert('#email', self.shopConfig.customerInformation.payPal.email)
-                    .insert('#password', self.shopConfig.customerInformation.payPal.password)
+                    .insert('#email', this.shopConfig.customerInformation.payPal.email)
+                    .insert('#password', this.shopConfig.customerInformation.payPal.password)
                     .click('#btnLogin')
                     .catch((error) => {
                         console.error(util.inspect(error));
@@ -169,7 +169,7 @@ class supremenewyork_com {
             });
 
             //6?
-            this.steps.push((browser, self = this) => {
+            this.steps.push((browser) => {
                 browser
                     .click('#confirmButtonTop')
                     .catch((error) => {
@@ -178,11 +178,11 @@ class supremenewyork_com {
             });
         }
 
-        this.runSteps = (browser, self = this) => {
+        this.runSteps = (browser) => {
             this.steps.forEach((element, index) => {
                 setTimeout(() => {
-                    element(self, browser);
-                }, index * self.shopConfig.pauseBetweenSteps);
+                    element(browser);
+                }, index * this.shopConfig.pauseBetweenSteps);
             });
         };
     }
